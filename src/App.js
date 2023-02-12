@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import './App.css';
 import debounceWrapper from './debounce';
+import List from './List';
 
 function App() {
   const [filterList, setFilterList] = useState([]);
@@ -68,48 +69,9 @@ function App() {
          loading ? <>Loading....</> : filterList.length ? <div className='list'>
             {
               filterList.map((item,i) => <div ref={(el) => (listRef.current[i] = el)} key={item.id} className='item'   onMouseMove={(e) => {setSelect(i);listRef.current[select].scrollIntoView({ behavior: 'smooth' })}} style={{background : item.id === filterList[select]?.id ? 'lightgray':''}}>
-                {
-                  item.id.toLowerCase().indexOf(query.toLowerCase()) > -1 ? <div className='id'>
-                    <span >{item.id.substring(0,item.id.toLowerCase().indexOf(query.toLowerCase()))}</span>
-                    <span style={{color:'blue'}}>{item.id.substring(item.id.toLowerCase().indexOf(query.toLowerCase()),item.id.toLowerCase().indexOf(query.toLowerCase()) + query.length)}</span>
-                    <span>{item.id.substring(item.id.toLowerCase().indexOf(query.toLowerCase())+query.length)}</span>
-                  </div>
-                  : <div className='id'>{item.id}</div>
-                }
-                {
-                  item.name.toLowerCase().indexOf(query.toLowerCase()) > -1 ? <div className='name'>
-                    <span >{item.name.substring(0,item.name.toLowerCase().indexOf(query.toLowerCase()))}</span>
-                    <span style={{color:'blue'}}>{item.name.substring(item.name.toLowerCase().indexOf(query.toLowerCase()),item.name.toLowerCase().indexOf(query.toLowerCase()) + query.length)}</span>
-                    <span>{item.name.substring(item.name.toLowerCase().indexOf(query.toLowerCase())+query.length)}</span>
-                  </div>
-                  : <div className='name'>{item.name}</div>
-                }
-
-                {!!item.found.length && item.found[0].toLowerCase().indexOf(query.toLowerCase()) > -1 && <div style={{padding: '5px',margin: '5px',borderBottom:'1px solid lightgray',borderTop:'1px solid lightgray'}} className='small'>
-                    <span >{item.found[0].substring(0,item.found[0].toLowerCase().indexOf(query.toLowerCase()))}</span>
-                    <span style={{color:'blue'}}>{item.found[0].substring(item.found[0].toLowerCase().indexOf(query.toLowerCase()),item.found[0].toLowerCase().indexOf(query.toLowerCase()) + query.length)}</span>
-                    <span>{item.found[0].substring(item.found[0].toLowerCase().indexOf(query.toLowerCase())+query.length)}</span>
-                    <span> found in items</span>
-                  </div>
-                }
-
-                {
-                  item.pincode.toLowerCase().indexOf(query.toLowerCase()) > -1 ? <div className='small'>
-                    <span >{item.pincode.substring(0,item.pincode.toLowerCase().indexOf(query.toLowerCase()))}</span>
-                    <span style={{color:'blue'}}>{item.pincode.substring(item.pincode.toLowerCase().indexOf(query.toLowerCase()),item.pincode.toLowerCase().indexOf(query.toLowerCase()) + query.length)}</span>
-                    <span>{item.pincode.substring(item.pincode.toLowerCase().indexOf(query.toLowerCase())+query.length)}</span>
-                  </div>
-                  : <div className='small'>{item.pincode}</div>
-                }
-                {
-                  item.address.toLowerCase().indexOf(query.toLowerCase()) > -1 ? <div className='small'>
-                    <span >{item.address.substring(0,item.address.toLowerCase().indexOf(query.toLowerCase()))}</span>
-                    <span style={{color:'blue'}}>{item.address.substring(item.address.toLowerCase().indexOf(query.toLowerCase()),item.address.toLowerCase().indexOf(query.toLowerCase()) + query.length)}</span>
-                    <span>{item.address.substring(item.address.toLowerCase().indexOf(query.toLowerCase())+query.length)}</span>
-                  </div>
-                  : <div className='small'>{item.address}</div>
-                }
-
+               {
+                Object.entries(item).map((ele) =>  <List item = {ele} query={query} i ={i}/>)
+               }
               </div>)
             }
         </div>
